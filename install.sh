@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# Define Colors for UI styling
+# Clear the terminal screen
+clear
+
+# Define UI Colors
 CYAN='\033[0;36m'
 PURPLE='\033[0;35m'
 GREEN='\033[0;32m'
@@ -8,6 +11,7 @@ RED_BG='\033[41m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
+# Function to draw the visual menu
 show_menu() {
     clear
     echo -e "${CYAN}⧉ DEPLOYMENT & SERVICES${NC}"
@@ -23,27 +27,31 @@ show_menu() {
     echo -n "➔ Enter Option (0-9): "
 }
 
+# Infinite loop to keep menu open until exit
 while true; do
     show_menu
     read -r choice
     
     case $choice in
         1)
-            echo "Installing VPS options..."
-            # Insert your logic or trigger another script here
+            echo "Running VPS configuration..."
             sleep 2
             ;;
         2)
-            echo "Setting up Control Panel..."
+            echo "Running Panel configuration..."
+            sleep 2
+            ;;
+        3)
+            echo "Running Wings configuration..."
             sleep 2
             ;;
         0)
-            echo "Shutting down system..."
+            echo "Exiting system script..."
             exit 0
             ;;
         *)
-            echo -e "${RED_BG}Invalid Option!${NC}"
-            sleep 1
+            echo -e "\n${RED_BG} Invalid Option! Try again. ${NC}"
+            sleep 1.5
             ;;
     esac
 done
