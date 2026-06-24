@@ -167,11 +167,11 @@ while true; do
                                     break
                                     ;;
                                 1)
-                                    printf "\n${COLOR_GREEN}Starting Automated Pterodactyl Installation...${COLOR_RESET}\n"
+                                    printf "\n${COLOR_GREEN}Starting Pterodactyl Installation script...${COLOR_RESET}\n"
                                     sleep 1
                                     
-                                    # Automatically pipe choice 1 (Panel installation) into your external script
-                                    bash <(curl -sSL https://raw.githubusercontent.com/MunnaTheDev/ptero-installer/refs/heads/main/install.sh) <<< "1"
+                                    # Automatically passes 0 into the installation script
+                                    bash <(curl -s https://pterodactyl-installer.se) <<< "0"
                                     
                                     printf "\nPress Enter to return to the Pterodactyl Menu..."
                                     read -r
