@@ -14,12 +14,50 @@ BG_GREEN="\e[42m"
 BG_CYAN="\e[46m"
 COLOR_RESET="\e[0m"
 
+# Function to calculate VPS uptime in HH:MM format dynamically
+get_vps_timer() {
+    local uptime_seconds
+    uptime_seconds=$(awk '{print int($1)}' /proc/uptime 2>/dev/null)
+    
+    if [ -z "$uptime_seconds" ]; then
+        # Fallback if /proc/uptime isn't available
+        printf "00:00"
+        return
+    fi
+
+    local hours=$((uptime_seconds / 3600))
+    local minutes=$(((uptime_seconds % 3600) / 60))
+    printf "%02d:%02d" $hours $minutes
+}
+
+# Function to get uptime text for system status (e.g., "10 minutes")
+get_uptime_text() {
+    local uptime_seconds
+    uptime_seconds=$(awk '{print int($1)}' /proc/uptime 2>/dev/null)
+    
+    if [ -z "$uptime_seconds" ]; then
+        printf "Unknown"
+        return
+    fi
+
+    local minutes=$((uptime_seconds / 60))
+    if [ $minutes -lt 60 ]; then
+        printf "%d minutes" $minutes
+    else
+        local hours=$((minutes / 60))
+        local remaining_minutes=$((minutes % 60))
+        printf "%d hours, %d mins" $hours $remaining_minutes
+    fi
+}
+
 while true; do
     $CLEAR_SCREEN
+    CURRENT_UPTIME=$(get_uptime_text)
+    VPS_TIMER=$(get_vps_timer)
     
     # 1. Top Badges Row
     printf "${BG_BLUE}${COLOR_WHITE} ⧉ root ${COLOR_RESET}  "
-    printf "${BG_PURPLE}${COLOR_WHITE} ⧉ 10 minutes ${COLOR_RESET}  "
+    printf "${BG_PURPLE}${COLOR_WHITE} ⧉ ${CURRENT_UPTIME} ${COLOR_RESET}  "
     printf "${BG_GREEN}${COLOR_WHITE} ⧉ 7%% ${COLOR_RESET}  "
     printf "${BG_CYAN}${COLOR_WHITE} ⧉ 1%% RAM 4%% ${COLOR_RESET}\n\n"
 
@@ -59,14 +97,18 @@ while true; do
             sleep 2
             ;;
         2)
-            # --- PANEL SUB-MENU (Matches the screenshot layout) ---
+            # --- PANEL SUB-MENU ---
             while true; do
                 $CLEAR_SCREEN
+                # Re-calculate timers for the sub-menu refresh
+                CURRENT_UPTIME=$(get_uptime_text)
+                VPS_TIMER=$(get_vps_timer)
+                
                 printf "┌────────────────────────────────────────────────────────┐\n"
-                printf "│ 🚀 ${COLOR_CYAN}SERVER PANEL MANAGER v15.0${COLOR_RESET}         00:56 │        │\n"
+                printf "│ 🚀 ${COLOR_CYAN}SERVER PANEL MANAGER v15.0${COLOR_RESET}         ${VPS_TIMER} │        │\n"
                 printf "└────────────────────────────────────────────────────────┘\n"
                 printf "${COLOR_CYAN}SYSTEM STATUS${COLOR_RESET}\n"
-                printf " └── Uptime : 10 minutes\n"
+                printf " └── Uptime : ${CURRENT_UPTIME}\n"
                 printf " └── Load   : 0.03\n"
                 printf "──────────────────────────────────────────────────────────\n"
                 printf " ⧉ AVAILABLE DEPLOYMENTS\n"
@@ -84,13 +126,11 @@ while true; do
                 
                 case $panel_choice in
                     0)
-                        # Exit sub-menu and go back to main menu
                         break
                         ;;
                     1)
                         printf "\n${COLOR_GREEN}Starting Pterodactyl Installer...${COLOR_RESET}\n"
                         sleep 1
-                        # Downloads and executes your installer script directly in bash
                         bash <(curl -sSL https://raw.githubusercontent.com/MunnaTheDev/ptero-installer/refs/heads/main/install.sh)
                         printf "\nPress Enter to return to the Panel Manager..."
                         read -r
