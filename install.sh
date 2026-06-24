@@ -134,4 +134,42 @@ while true; do
                             printf " ___  _                     _              _   _ _ \n"
                             printf "|  _ \ sketch _ ___ _ _  __| | ___ _  ___ | |_| | |\n"
                             printf "| |_) |  _/ _ \  _ \ ' \/ _\` |/ _ \ |/ _ \|  _|_| |\n"
-                            printf "|  __/| ||
+                            printf "|  __/| ||  __/ |  | | | (_| |  __/ | (_| | |_ _ _|\n"
+                            printf "|_|   |_| \___|_|  |_|_|\__,_|\___|_|\___/ \__(_|_)\n"
+                            printf "${COLOR_RESET}\n"
+                            
+                            # Real-time panel validation check
+                            if [ -d "/var/www/pterodactyl" ]; then
+                                STATUS_TEXT="${COLOR_GREEN}INSTALLED ✓${COLOR_RESET}         "
+                            else
+                                STATUS_TEXT="${COLOR_RED}NOT INSTALLED${COLOR_RESET}       "
+                            fi
+                            
+                            printf "┌──────────────────────────────────────────────┐\n"
+                            printf "│ PANEL STATUS: %b │\n" "$STATUS_TEXT"
+                            printf "└──────────────────────────────────────────────┘\n"
+                            printf "┌──────────────────────────────────────────────┐\n"
+                            printf "│ [1] ${COLOR_GREEN}Install${COLOR_RESET}      :: (Fresh Install)          │\n"
+                            printf "│ [2] ${COLOR_GREEN}User${COLOR_RESET}         :: (Add Admin/User)         │\n"
+                            printf "│ [3] ${COLOR_CYAN}Update${COLOR_RESET}       :: (Latest Release)         │\n"
+                            printf "│ [4] ${COLOR_RED}Domin${COLOR_RESET}        :: (Chang/domin/ssl)        │\n"
+                            printf "│ [5] ${COLOR_RED}Uninstall${COLOR_RESET}    :: (Remove Data)            │\n"
+                            printf "│ [6] ${COLOR_RED}phpmyadmin${COLOR_RESET}   :: (phpmyadmin Data)        │\n"
+                            printf "│                                              │\n"
+                            printf "│ [0] Exit System                              │\n"
+                            printf "└──────────────────────────────────────────────┘\n\n"
+                            printf "root@ptero:~# "
+                            
+                            read -r ptero_choice
+                            
+                            case $ptero_choice in
+                                0)
+                                    break
+                                    ;;
+                                1)
+                                    printf "\n${COLOR_GREEN}Launching Pterodactyl Installation (Option 0)...${COLOR_RESET}\n"
+                                    sleep 1
+                                    
+                                    # Simulates pressing '0' then 'Enter' instantly into the TTY terminal stream
+                                    # without closing interaction for subsequent questions
+                                    (echo
