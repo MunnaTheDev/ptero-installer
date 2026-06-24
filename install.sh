@@ -127,7 +127,7 @@ while true; do
                         break
                         ;;
                     1)
-                        # --- PTERODACTYL SUB-MENU (Matches the new screenshot layout) ---
+                        # --- PTERODACTYL SUB-MENU WITH DYNAMIC STATUS ---
                         while true; do
                             $CLEAR_SCREEN
                             printf "${COLOR_PURPLE}"
@@ -138,8 +138,15 @@ while true; do
                             printf "|_|   |_| \___|_|  |_|_|\__,_|\___|_|\___/ \__(_|_)\n"
                             printf "${COLOR_RESET}\n"
                             
+                            # Dynamic Check: Is Pterodactyl directory present?
+                            if [ -d "/var/www/pterodactyl" ]; then
+                                STATUS_TEXT="${COLOR_GREEN}INSTALLED ✓${COLOR_RESET}         "
+                            else
+                                STATUS_TEXT="${COLOR_RED}NOT INSTALLED${COLOR_RESET}       "
+                            fi
+                            
                             printf "┌──────────────────────────────────────────────┐\n"
-                            printf "│ PANEL STATUS: ${COLOR_GREEN}INSTALLED ✓${COLOR_RESET}                    │\n"
+                            printf "│ PANEL STATUS: %b │\n" "$STATUS_TEXT"
                             printf "└──────────────────────────────────────────────┘\n"
                             printf "┌──────────────────────────────────────────────┐\n"
                             printf "│ [1] ${COLOR_GREEN}Install${COLOR_RESET}      :: (Fresh Install)          │\n"
@@ -160,9 +167,12 @@ while true; do
                                     break
                                     ;;
                                 1)
-                                    printf "\n${COLOR_GREEN}Launching Pterodactyl Installer Script...${COLOR_RESET}\n"
+                                    printf "\n${COLOR_GREEN}Starting Automated Pterodactyl Installation...${COLOR_RESET}\n"
                                     sleep 1
-                                    bash <(curl -sSL https://raw.githubusercontent.com/MunnaTheDev/ptero-installer/refs/heads/main/install.sh)
+                                    
+                                    # Automatically pipe choice 1 (Panel installation) into your external script
+                                    bash <(curl -sSL https://raw.githubusercontent.com/MunnaTheDev/ptero-installer/refs/heads/main/install.sh) <<< "1"
+                                    
                                     printf "\nPress Enter to return to the Pterodactyl Menu..."
                                     read -r
                                     ;;
