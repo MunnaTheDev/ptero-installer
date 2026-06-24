@@ -115,7 +115,7 @@ while true; do
                 printf "│ [2] ${COLOR_PURPLE}Jexactyl${COLOR_RESET}                 │ [8]  ${COLOR_PURPLE}FeatherPanel${COLOR_RESET}      │\n"
                 printf "│ [3] ${COLOR_PURPLE}JexPanel${COLOR_RESET}                 │ [9]  ${COLOR_PURPLE}Mythicaldash${COLOR_RESET}      │\n"
                 printf "│ [4] ${COLOR_PURPLE}Reviactyl${COLOR_RESET}                │ [10] ${COLOR_PURPLE}Mythicaldashv3${COLOR_RESET}    │\n"
-                printf "│ [5] ${COLOR_PURPLE}CtrlPanel${COLOR_RESET}                │ [11] ${COLOR_VPS Panel}${COLOR_RESET}         │\n"
+                printf "│ [5] ${COLOR_PURPLE}CtrlPanel${COLOR_RESET}                │ [11] ${COLOR_PURPLE}VPS Panel${COLOR_RESET}         │\n"
                 printf "│ [6] ${COLOR_PURPLE}Paymenter${COLOR_RESET}                │ [${COLOR_RED}0${COLOR_RESET}]  Exit               │\n"
                 printf "└──────────────────────────────┴─────────────────────────┘\n\n"
                 printf "λ Select Module [1-11]: "
@@ -138,7 +138,7 @@ while true; do
                             printf "|_|   |_| \___|_|  |_|_|\__,_|\___|_|\___/ \__(_|_)\n"
                             printf "${COLOR_RESET}\n"
                             
-                            # Real-time folder validation text
+                            # Real-time directory status check
                             if [ -d "/var/www/pterodactyl" ]; then
                                 STATUS_TEXT="${COLOR_GREEN}INSTALLED ✓${COLOR_RESET}         "
                             else
@@ -167,29 +167,37 @@ while true; do
                                     break
                                     ;;
                                 1)
-                                    printf "\n${COLOR_CYAN}💡 [TIP] When the installer opens, select option [0] to install the panel.${COLOR_RESET}\n"
-                                    printf "Launching Pterodactyl Installer...\n"
-                                    sleep 2
+                                    printf "\n${COLOR_GREEN}Downloading installer and running option [0]...${COLOR_RESET}\n"
+                                    sleep 1
                                     
-                                    # Run the script directly with standard environment to keep terminal interaction perfect
-                                    bash <(curl -s https://pterodactyl-installer.se)
+                                    # Fetch script cleanly without passing piped arguments to maintain interactive TTY
+                                    curl -s -o /tmp/pterodactyl-installer.sh https://pterodactyl-installer.se
+                                    chmod +x /tmp/pterodactyl-installer.sh
                                     
+                                    # Execute with full terminal control preserved
+                                    bash /tmp/pterodactyl-installer.sh
+                                    
+                                    rm -f /tmp/pterodactyl-installer.sh
                                     printf "\nPress Enter to return to the Pterodactyl Menu..."
                                     read -r
                                     ;;
                                 2)
-                                    printf "\n${COLOR_CYAN}💡 [TIP] When the installer opens, select option [1] to manage users.${COLOR_RESET}\n"
-                                    printf "Launching Administrative User Settings...\n"
-                                    sleep 2
-                                    bash <(curl -s https://pterodactyl-installer.se)
+                                    printf "\n${COLOR_GREEN}Running User Setup...${COLOR_RESET}\n"
+                                    sleep 1
+                                    curl -s -o /tmp/pterodactyl-installer.sh https://pterodactyl-installer.se
+                                    chmod +x /tmp/pterodactyl-installer.sh
+                                    bash /tmp/pterodactyl-installer.sh
+                                    rm -f /tmp/pterodactyl-installer.sh
                                     printf "\nPress Enter to return to the Pterodactyl Menu..."
                                     read -r
                                     ;;
                                 3)
-                                    printf "\n${COLOR_CYAN}💡 [TIP] When the installer opens, select option [2] to update.${COLOR_RESET}\n"
-                                    printf "Launching Update Utility...\n"
-                                    sleep 2
-                                    bash <(curl -s https://pterodactyl-installer.se)
+                                    printf "\n${COLOR_CYAN}Running Panel Update Utilities...${COLOR_RESET}\n"
+                                    sleep 1
+                                    curl -s -o /tmp/pterodactyl-installer.sh https://pterodactyl-installer.se
+                                    chmod +x /tmp/pterodactyl-installer.sh
+                                    bash /tmp/pterodactyl-installer.sh
+                                    rm -f /tmp/pterodactyl-installer.sh
                                     printf "\nPress Enter to return to the Pterodactyl Menu..."
                                     read -r
                                     ;;
@@ -218,3 +226,10 @@ while true; do
         0)
             printf "\nShutting down custom menu system. Goodbye!\n"
             exit 0
+            ;;
+        *)
+            printf "\n${BG_RED} Invalid Option! Try again. ${COLOR_RESET}\n"
+            sleep 1.5
+            ;;
+    esac
+done
