@@ -87,7 +87,15 @@ while true; do
                         # Exit sub-menu and go back to main menu
                         break
                         ;;
-                    1|2|3|4|5|6|7|8|9|10|11)
+                    1)
+                        printf "\n${COLOR_GREEN}Starting Pterodactyl Installer...${COLOR_RESET}\n"
+                        sleep 1
+                        # Downloads and executes your installer script directly in bash
+                        bash <(curl -sSL https://raw.githubusercontent.com/MunnaTheDev/ptero-installer/refs/heads/main/install.sh)
+                        printf "\nPress Enter to return to the Panel Manager..."
+                        read -r
+                        ;;
+                    2|3|4|5|6|7|8|9|10|11)
                         printf "\n${COLOR_CYAN}🔧 Coming Soon...${COLOR_RESET}\n"
                         sleep 2
                         ;;
@@ -95,7 +103,7 @@ while true; do
                         printf "\n${BG_RED} Invalid Option! Try again. ${COLOR_RESET}\n"
                         sleep 1.5
                         ;;
-                 Wharton esac
+                esac
             done
             ;;
         3)
